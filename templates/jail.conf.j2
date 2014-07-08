@@ -1,0 +1,112 @@
+# Fail2Ban configuration file Version 2
+# With Email Notifications
+# Author: Adam
+#
+# $Revision$
+#
+
+[DEFAULT]
+
+# "ignoreip" can be an IP address, a CIDR mask or a DNS host
+
+ignoreip = 127.0.0.1/8 217.36.5.158/32
+bantime  = 72000
+maxretry = 3
+backend = auto
+destemail = serverstatus@forepoint.co.uk
+
+#
+# ACTIONS
+#
+
+banaction = iptables-multiport
+mta = sendmail
+protocol = tcp
+chain = INPUT
+
+# Action shortcuts. To be used to define action parameter
+
+# The simplest action to take: ban only
+action_ = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+
+# ban & send an e-mail with whois report to the destemail.
+action_mw = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+              %(mta)s-whois[name=%(__name__)s, dest="%(destemail)s", protocol="%(protocol)s", chain="%(chain)s"]
+
+# ban & send an e-mail with whois report and relevant log lines
+# to the destemail.
+action_mwl = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+               %(mta)s-whois-lines[name=%(__name__)s, dest="%(destemail)s", logpath=%(logpath)s, chain="%(chain)s"]
+
+# Lets send an email when strange behaviour goes on.
+action = %(action_mwl)s
+
+#
+# JAILS
+#
+
+# Wordpress Related
+
+[wp-login]
+enabled = true
+port    = http,https
+action   = iptables[name=Wordpress-Login, port=http, protocol=tcp]
+	sendmail-whois[name=Fail2ban-Wordpress, dest=serverstatus@forepoint.co.uk, sender=notice@{{ ansible_hostname }}.forepoint.biz]
+filter  = wp-login
+logpath = /var/www/logs/*/access.log
+maxretry = 5
+
+# SSH
+
+[ssh]
+enabled  = true
+port     = ssh
+filter   = sshd
+logpath  = /var/log/auth.log
+maxretry = 3
+
+
+[ssh-ddos]
+enabled  = true
+port     = ssh
+filter   = sshd-ddos
+logpath  = /var/log/auth.log
+maxretry = 3
+
+#
+# HTTP servers
+#
+
+[apache]
+enabled  = true
+port     = http,https
+filter   = apache-auth
+logpath = /var/www/logs/*/error.log
+maxretry = 6
+
+
+[apache-noscript]
+enabled  = true
+port     = http,https
+filter   = apache-noscript
+logpath = /var/www/logs/*/error.log
+maxretry = 6
+
+
+[apache-overflows]
+enabled  = true
+port     = http,https
+filter   = apache-overflows
+logpath = /var/www/logs/*/error.log
+maxretry = 2
+
+
+#
+# Mail servers
+#
+
+[postfix]
+enabled  = true
+port     = smtp,ssmtp
+filter   = postfix
+logpath  = /var/log/mail.log

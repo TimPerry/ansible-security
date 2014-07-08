@@ -1,0 +1,13 @@
+---
+- name: ensure fail2ban is the latest version 
+  apt: name=fail2ban update_cache=yes
+- name: write our fail2ban config 
+  template: src=jail.conf.j2 dest=/etc/fail2ban/jail.conf
+  notify:
+  - restart fail2ban
+- name: write our fail2ban wp config
+  template: src=wp-login.conf.j2 dest=/etc/fail2ban/filter.d/wp-login.conf
+  notify:
+  - restart fail2ban 
+- name: ensure fail2ban is running
+  service: name=fail2ban state=started

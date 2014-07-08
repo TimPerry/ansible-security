@@ -1,0 +1,7 @@
+---
+- name: install iptables
+  apt: name=iptables update_cache=yes
+- name: copy iptables to root
+  copy: src=iptables.sh dest=/usr/local/bin/iptables.sh
+- name: run iptables
+  command: /usr/local/bin/iptables.sh

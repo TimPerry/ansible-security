@@ -1,0 +1,28 @@
+# list of ports we should pretend to be listening on
+TCP_PORTS="1,11,15,79,111,119,143,540,635,1080,1524,2000,5742,6667,12345,12346,20034,27665,31337,32771,32772,32773,32774,40421,49724,54320"
+UDP_PORTS="1,7,9,69,161,162,513,635,640,641,700,37444,34555,31335,32770,32771,32772,32773,32774,31337,54321"
+
+# define os ports that a user must be root to listen on
+ADVANCED_PORTS_TCP="1024"
+ADVANCED_PORTS_UDP="1024"
+
+# list of ports (except ones actually being listened on) to be ignored
+ADVANCED_EXCLUDE_TCP="113,139"
+ADVANCED_EXCLUDE_UDP="520,138,137,67"
+
+# configure files
+IGNORE_FILE="/etc/portsentry/portsentry.ignore"
+HISTORY_FILE="/var/lib/portsentry/portsentry.history"
+BLOCKED_FILE="/var/lib/portsentry/portsentry.blocked"
+
+# dont resolve hosts
+RESOLVE_HOST = "0"
+
+# enable blocking on udp and tcp
+BLOCK_UDP="1"
+BLOCK_TCP="1"
+
+# setup how to kill attackers
+KILL_ROUTE="/sbin/route add -host $TARGET$ reject"
+KILL_HOSTS_DENY="ALL: $TARGET$ : DENY"
+SCAN_TRIGGER="0"
