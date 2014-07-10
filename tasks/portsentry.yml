@@ -4,4 +4,4 @@
 - name: write our portsentry config 
   copy: src=portsentry.conf dest=/etc/portsentry/portsentry.conf
   notify:
-  - restart portsentry
+  - restart portsentry 
