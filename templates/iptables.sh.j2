@@ -49,3 +49,8 @@ iptables -A OUTPUT -p tcp --dport 53 -j ACCEPT
 
 # prevent dos
 iptables -A INPUT -p tcp --dport 80 -m limit --limit 25/minute --limit-burst 100 -j ACCEPT
+
+# mysql
+iptables -A INPUT -p tcp --sport 3306 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 3306 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 3306 -j ACCEPT
