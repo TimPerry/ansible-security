@@ -2,6 +2,8 @@
 - name: install iptables
   apt: name=iptables update_cache=yes
 - name: copy iptables to root
-  copy: src=iptables.sh dest=/usr/local/bin/iptables.sh
+  template: src=iptables.sh.j2 dest=/usr/local/bin/iptables.sh
+- name: change persmissions on iptables
+  command: chmod a+x /usr/local/bin/iptables.sh
 - name: run iptables
   command: /usr/local/bin/iptables.sh

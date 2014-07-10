@@ -17,7 +17,7 @@ MAILSUBJ="Daily AIDE report for $FQDN"
 # here. For example, MAILTO=$FQDN-aide@domain.example will send the
 # report to host.name.example-aide@domain.example is the local FQDN is
 # host.name.example.
-MAILTO=serverstatus@forepoint.co.uk
+MAILTO={{ admin_email }}
 
 # Set this to yes to suppress mailings when no changes have been
 # detected during the AIDE run and no error output was given.

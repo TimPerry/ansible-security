@@ -2,6 +2,6 @@
 - name: ensure portsentry is the latest version 
   apt: name=portsentry update_cache=yes
 - name: write our portsentry config 
-  template: src=portsentry.conf.j2 dest=/etc/portsentry/portsentry.conf
+  copy: src=portsentry.conf dest=/etc/portsentry/portsentry.conf
   notify:
   - restart portsentry

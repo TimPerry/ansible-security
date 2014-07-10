@@ -2,9 +2,9 @@
 - name: ensure aide is the latest version 
   apt: name=aide update_cache=yes
 - name: write our aide config
-  template: src=aide.conf.j2 dest=/etc/aide/aide.conf
+  copy: src=aide.conf dest=/etc/aide/aide.conf
 - name: write our aide default config
-  template: src=aide.j2 dest=/etc/default/aide
+  copy: src=aide dest=/etc/default/aide
 - name: setup aide wrapper
   command: /usr/bin/aide.wrapper -D creates=/var/lib/aide/aide.db
 - name: initalise aide
